@@ -41,7 +41,12 @@ class TeaModule(Module):
                     return
                 
                 self.irc.privmsg(message.messageTo, "The maid hands a cup of %s tea to %s and hope you like it ^^" % (tea, giveTo))
-                
+ 
+    def handleError(self, message, command, error):
+        if message.command == "PRIVMSG":
+            if command.command == self.fantasy + self.command:
+                self.irc.privmsg(message.messageTo, "The maid is sorry, but the tea is not available :(")
+                return 
 
 
                 

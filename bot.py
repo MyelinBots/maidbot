@@ -1,5 +1,6 @@
 from pyircsdk import IRCSDKConfig, IRCSDK, Module
 
+from modules.clean.clean import CleanModule
 from modules.tea.tea import TeaModule
 from modules.ramen.ramen import RamenModule
 from modules.cake.cake import CakeModule
@@ -27,5 +28,8 @@ snackModule.startListening()
 
 greetingModule = GreetingModule(irc)
 greetingModule.startListening()
+
+cleanModule = CleanModule(irc)
+cleanModule.startListening()
 
 irc.connect(None)
