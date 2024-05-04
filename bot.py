@@ -11,6 +11,7 @@ from modules.drink.drink import DrinkModule
 
 host = os.getenv('HOST', 'irc.rizon.net')
 port = os.getenv('PORT', 6667)
+port = str(port)
 nick = os.getenv('NICK', 'Maid')
 channel = os.getenv('CHANNEL', '#toolbot')
 realname = os.getenv('REALNAME', 'Maid')
