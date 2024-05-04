@@ -1,0 +1,74 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set repo name environment variable
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+      - uses: actions/checkout@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Build the Docker image
+        run: |
+          docker build --build-arg VERSION=${{ github.sha }} -t ${{ env.REPO_NAME }} .
+          docker tag ${{ env.REPO_NAME }} ${{ secrets.REGISTRY }}/floret/${{ env.REPO_NAME }}:${{ github.sha }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Push to Harbor Container Registry (test)
+        run: |
+          docker push ${{ secrets.REGISTRY }}/floret/${{ env.REPO_NAME }}:${{ github.sha }}
+          docker save ${{ env.REPO_NAME }} >> ${{ env.REPO_NAME }}.tar
+      - name: Set env
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+      - name: release
+        uses: cycjimmy/semantic-release-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          DOCKER_REPO_TEST: ${{ secrets.REGISTRY }}/floret/${{ env.REPO_NAME }}
+          DOCKER_REPO_PROD: ${{ secrets.REGISTRY }}/floret/${{ env.REPO_NAME }}
+        with:
+          semantic_version: 18
+          extra_plugins: |
+            @semantic-release/git@10.0.1
+            @semantic-release/exec@6.0.2
+            @semantic-release/changelog@6.0.1
+
+      - uses: actions/checkout@v3
+      - name: Set env
+        run: |
+          git fetch --tags
+          export GITHUB_REF_NAME=$(git describe --tags --abbrev=0)
+          echo "RELEASE_VERSION=$GITHUB_REF_NAME" >> $GITHUB_ENV
+      - name: checkout argocd repo
+        uses: actions/checkout@v3
+        with:
+          repository: 'bludot/floret_argocd'
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: 'argocd'
+      - name: deploy to argocd
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          REPO_NAME: ${{ env.REPO_NAME }}
+        # pull argocd repo and push to argocd
+        run: |
+          RELEASE_VERSION=$(echo $RELEASE_VERSION | sed 's/v//')
+          cd argocd && find . -type f -name '*.yaml' -print0 | xargs -0 sed -E -i 's/(tag:[[:space:]]).*( # '"$REPO_NAME"')/\1'"$RELEASE_VERSION"'\2/'
+          git config --global user.email "noreply@weeb.vip"
+          git config --global user.name "weeb-vip"
+          git add .
+          git commit -m "feat: $REPO_NAME $RELEASE_VERSION"
+          git push origin main
