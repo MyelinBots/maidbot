@@ -6,6 +6,7 @@ from modules.ramen.ramen import RamenModule
 from modules.cake.cake import CakeModule
 from modules.snack.snack import SnackModule
 from modules.greeting.greeting import GreetingModule
+from modules.drink.drink import DrinkModule
 
 irc = IRCSDK(IRCSDKConfig('irc.rizon.net',
                           6667,
@@ -31,5 +32,8 @@ greetingModule.startListening()
 
 cleanModule = CleanModule(irc)
 cleanModule.startListening()
+
+drinkModule = DrinkModule(irc)
+drinkModule.startListening()
 
 irc.connect(None)
