@@ -56,7 +56,7 @@ jobs:
       - name: checkout argocd repo
         uses: actions/checkout@v3
         with:
-          repository: 'bludot/floret-argocd'
+          repository: 'bludot/floret_argocd'
           token: ${{ secrets.ACCESS_TOKEN }}
           path: 'argocd'
       - name: deploy to argocd
