@@ -10,8 +10,9 @@ from modules.greeting.greeting import GreetingModule
 from modules.drink.drink import DrinkModule
 
 host = os.getenv('HOST', 'irc.rizon.net')
-port = os.getenv('PORT', 6667)
-port = str(port)
+port = os.getenv('PORT', '6667')
+# convert port string to int
+port = int(port)
 nick = os.getenv('NICK', 'Maid')
 channel = os.getenv('CHANNEL', '#toolbot')
 realname = os.getenv('REALNAME', 'Maid')
