@@ -70,5 +70,6 @@ jobs:
           git config --global user.email "noreply@weeb.vip"
           git config --global user.name "weeb-vip"
           git add .
+          git status
           git commit -m "feat: $REPO_NAME $RELEASE_VERSION"
           git push origin main
