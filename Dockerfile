@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN apk add --no-cache python3 py3-pip && \
+RUN apk add python3 py3-pip bash && \
     pip3 install --upgrade pip && \
     pip3 install -r requirements.txt
 
