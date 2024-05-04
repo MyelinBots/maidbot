@@ -35,4 +35,9 @@ class CakeModule(Module):
                     return
                 
                 self.irc.privmsg(message.messageTo, "The maid serves a piece of %s cake to %s and hope you like it ^^" % (cake, giveTo))
-                
+
+    def handleError(self, message, command, error):
+        if message.command == "PRIVMSG":
+            if command.command == self.fantasy + self.command:
+                self.irc.privmsg(message.messageTo, "The maid is sorry, but the cake is not available :(")
+                return  

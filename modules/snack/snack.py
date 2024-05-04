@@ -41,6 +41,10 @@ class SnackModule(Module):
                 
                 self.irc.privmsg(message.messageTo, "The maid gives %s to %s" % (snack, giveTo))
                 
-
+    def handleError(self, message, command, error):
+        if message.command == "PRIVMSG":
+            if command.command == self.fantasy + self.command:
+                self.irc.privmsg(message.messageTo, "The maid is sorry, but the fridge is empty :(")
+                return 
 
                 

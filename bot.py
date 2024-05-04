@@ -1,10 +1,12 @@
 from pyircsdk import IRCSDKConfig, IRCSDK, Module
 
+from modules.clean.clean import CleanModule
 from modules.tea.tea import TeaModule
 from modules.ramen.ramen import RamenModule
 from modules.cake.cake import CakeModule
 from modules.snack.snack import SnackModule
 from modules.greeting.greeting import GreetingModule
+from modules.drink.drink import DrinkModule
 
 irc = IRCSDK(IRCSDKConfig('irc.rizon.net',
                           6667,
@@ -27,5 +29,11 @@ snackModule.startListening()
 
 greetingModule = GreetingModule(irc)
 greetingModule.startListening()
+
+cleanModule = CleanModule(irc)
+cleanModule.startListening()
+
+drinkModule = DrinkModule(irc)
+drinkModule.startListening()
 
 irc.connect(None)
