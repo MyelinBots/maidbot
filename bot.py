@@ -15,6 +15,7 @@ port = os.getenv('PORT', '6667')
 port = int(port)
 nick = os.getenv('NICK', 'Maid')
 channel = os.getenv('CHANNEL', '#toolbot')
+user = os.getenv('USER', 'Maid')
 realname = os.getenv('REALNAME', 'Maid')
 
 irc = IRCSDK(IRCSDKConfig(
@@ -22,6 +23,7 @@ irc = IRCSDK(IRCSDKConfig(
     port,
     nick,
     channel,
+    user,
     realname
 ))
 
