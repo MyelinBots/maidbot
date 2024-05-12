@@ -14,19 +14,26 @@ port = os.getenv('PORT', '6667')
 # convert port string to int
 port = int(port)
 nick = os.getenv('NICK', 'Maid')
+ssl = os.getenv('SSL', 'False')
 channel = os.getenv('CHANNEL', '#toolbot')
 user = os.getenv('USER', 'Maid')
 realname = os.getenv('REALNAME', 'Maid')
+nickservFormat = os.getenv('NICKSERV_FORMAT', 'nickserv :identify %s')
+nickservPassword = os.getenv('NICKSERV_PASSWORD', None)
+passw = os.getenv('PASS', None)
 
 irc = IRCSDK(IRCSDKConfig(
-    host,
-    port,
-    nick,
-    channel,
-    user,
-    realname
+    host=host,
+    port=port,
+    nick=nick,
+    ssl=ssl == 'True',
+    channel=channel,
+    user=user,
+    realname=realname,
+    nickservFormat=nickservFormat,
+    nickservPassword=nickservPassword,
+    password=passw
 ))
-
 teaModule = TeaModule(irc)
 teaModule.startListening()
 

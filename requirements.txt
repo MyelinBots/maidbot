@@ -1,1 +1,1 @@
-pyircsdk~=1.2.0
+pyircsdk~=1.5.0
