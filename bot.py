@@ -1,13 +1,13 @@
 from pyircsdk import IRCSDKConfig, IRCSDK, Module
 import os
 
-from modules.clean.clean import CleanModule
 from modules.tea.tea import TeaModule
 from modules.ramen.ramen import RamenModule
 from modules.cake.cake import CakeModule
 from modules.snack.snack import SnackModule
 from modules.greeting.greeting import GreetingModule
 from modules.drink.drink import DrinkModule
+from modules.maid.maid import MaidModule
 
 host = os.getenv('HOST', 'irc.rizon.net')
 port = os.getenv('PORT', '6667')
@@ -42,8 +42,8 @@ snackModule.startListening()
 greetingModule = GreetingModule(irc)
 greetingModule.startListening()
 
-cleanModule = CleanModule(irc)
-cleanModule.startListening()
+maidModule = MaidModule(irc)
+maidModule.startListening()
 
 drinkModule = DrinkModule(irc)
 drinkModule.startListening()
