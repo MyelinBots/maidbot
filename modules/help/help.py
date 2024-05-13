@@ -8,7 +8,7 @@ class HelpModule(Module):
     def __init__(self, irc):
         super().__init__(irc, "!", "help")
 
-    def handleCommand(self, message, messegeTo):
+    def handleCommand(self, message, command):
         if command.command == "PRIVMSG":
            if command.command == self.fantasy + self.command:
 
