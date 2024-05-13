@@ -8,11 +8,11 @@ class TeaModule(Module):
     def __init__(self, irc):
         super().__init__(irc, "!", "tea")
         self.teas = [
-            "rose", 
-            "lavender", 
-            "oolong", 
-            "ginger", 
-            "turmeric", 
+            "rose" , 
+            "lavender" , 
+            "oolong" , 
+            "ginger" , 
+            "turmeric" , 
             "green" ,
             "chai" ,
             "herbal" ,

@@ -8,6 +8,8 @@ from modules.snack.snack import SnackModule
 from modules.greeting.greeting import GreetingModule
 from modules.drink.drink import DrinkModule
 from modules.maid.maid import MaidModule
+from modules.help.help import HelpModule
+from modules.coffee.coffee import CoffeeModule
 
 host = os.getenv('HOST', 'irc.rizon.net')
 port = os.getenv('PORT', '6667')
@@ -34,6 +36,7 @@ irc = IRCSDK(IRCSDKConfig(
     nickservPassword=nickservPassword,
     password=passw
 ))
+
 teaModule = TeaModule(irc)
 teaModule.startListening()
 
@@ -54,5 +57,11 @@ maidModule.startListening()
 
 drinkModule = DrinkModule(irc)
 drinkModule.startListening()
+
+helpModule = HelpModule(irc)
+helpModule.startListening()
+
+coffeeModule = CoffeeModule(irc)
+coffeeModule.startListening()
 
 irc.connect(None)

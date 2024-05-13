@@ -8,18 +8,18 @@ class RamenModule(Module):
     def __init__(self, irc):
         super().__init__(irc, "!", "ramen")
         self.ramens = [
-            "Tonkotsu", 
-            "Miso", 
-            "Shoyu", 
-            "Shio", 
-            "Tsukemen", 
-            "Kagoshima" ,
-            "Hakata" ,
-            "Supporo" ,
-            "Ramyoen" ,
-            "Wakayama" ,
-            "Okianawa" ,
-            "Hakodate" 
+            "tonkotsu", 
+            "miso", 
+            "shoyu", 
+            "shio", 
+            "tsukemen", 
+            "kagoshima",
+            "hakata",
+            "supporo",
+            "ramyoen",
+            "wakayama",
+            "okianawa",
+            "hakodate" 
         ]
 
     def handleCommand(self, message, command):
