@@ -8,6 +8,7 @@ from modules.snack.snack import SnackModule
 from modules.greeting.greeting import GreetingModule
 from modules.drink.drink import DrinkModule
 from modules.maid.maid import MaidModule
+from modules.help.help import HelpModule
 
 host = os.getenv('HOST', 'irc.rizon.net')
 port = os.getenv('PORT', '6667')
@@ -54,5 +55,8 @@ maidModule.startListening()
 
 drinkModule = DrinkModule(irc)
 drinkModule.startListening()
+
+helpModule = HelpModule(irc)
+helpModule.startListening()
 
 irc.connect(None)
