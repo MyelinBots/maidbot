@@ -35,6 +35,7 @@ irc = IRCSDK(IRCSDKConfig(
     nickservPassword=nickservPassword,
     password=passw
 ))
+
 teaModule = TeaModule(irc)
 teaModule.startListening()
 
