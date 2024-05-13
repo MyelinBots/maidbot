@@ -8,24 +8,25 @@ class SnackModule(Module):
     def __init__(self, irc):
         super().__init__(irc, "!", "snack")
         self.snacks = [
-            "a piece of Hawaiian pizza", 
-            "a piece of New York Style pizza", 
-            "a piece of Greek pizza", 
-            "a piece of Margherita pizza!", 
-            "a can of Pepsi", 
-            "a can of Coca-cola" ,
-            "popcorn" ,
-            "Vanilla ice cream" ,
-            "Rainbow ice cream" ,
-            "Chocolate ice cream" ,
-            "Coconut ice cream" ,
-            "Strawberry ice cream" ,
-            "nothing" ,
-            "kit kat" ,
-            "ferrero rocher" ,
-            "Lays chips" ,
-            "marshmallow" ,
-            "hamburger"
+            "a piece of hawaiian pizza", 
+            "a piece of new York Style pizza", 
+            "a piece of greek pizza", 
+            "a piece of margherita pizza!", 
+            "a can of pepsi", 
+            "a can of coca-cola",
+            "popcorn",
+            "vanilla ice cream",
+            "rainbow ice cream",
+            "chocolate ice cream",
+            "coconut ice cream",
+            "strawberry ice cream",
+            "nothing",
+            "kit kat",
+            "ferrero rocher",
+            "lays chips",
+            "marshmallow",
+            "hamburger", 
+            "fried chicken"
         ]
 
     def handleCommand(self, message, command):

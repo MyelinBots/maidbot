@@ -24,9 +24,8 @@ class MaidModule(Module):
             "cleans bathroom",
             "walks the doggie",
             "does the laungry",
-            "washes the shoes"
-            "cleans bathtub" ,
-
+            "washes the shoes",
+            "cleans bathtub"
         ]
 
     def handleCommand(self, message, command):
