@@ -8,11 +8,11 @@ class CoffeeModule(Module):
     def __init__(self, irc):
         super().__init__(irc, "!", "coffee")
         self.coffees = [
-            "a cup of cappuccino", 
-            "a cup of latte", 
-            "a cup of americano", 
-            "a cup of caffe macchiato", 
-            "a cup of espresso", 
+            "a cup of cappuccino" , 
+            "a cup of latte" , 
+            "a cup of americano" , 
+            "a cup of caffe macchiato" , 
+            "a cup of espresso" , 
             "a cup of flat white" ,
             "a cup of cortado" ,
             "a cup of cafe mocha" ,
@@ -46,4 +46,4 @@ class CoffeeModule(Module):
         if message.command == "PRIVMSG":
             if command.command == self.fantasy + self.command:
                 self.irc.privmsg(message.messageTo, "The coffee machine is out of service :P")
-                return  
+                return
