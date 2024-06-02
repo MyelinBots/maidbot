@@ -1,1 +1,2 @@
-pyircsdk~=1.5.1
+pyircsdk~=1.5.3
+requests~=2.32.3
