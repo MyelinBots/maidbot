@@ -18,7 +18,7 @@ class CoffeeModule(Module):
             "a cup of cafe mocha",
             "a glass of affogato",
             "a glass of cold brew",
-            "a cup of doppio of ",
+            "a cup of doppio",
             "a glass of iced coffee",
             "a cup of cafe au lait",
             "a glass of ristretto",
