@@ -19,6 +19,7 @@ port = int(port)
 nick = os.getenv('NICK', 'Maid')
 ssl = os.getenv('SSL', 'True')
 channel = os.getenv('CHANNEL', '#lobby')
+channels = os.getenv('CHANNELS', '#lobby,#test').split(',')
 user = os.getenv('USER', 'Maid')
 realname = os.getenv('REALNAME', 'Maid')
 nickservFormat = os.getenv('NICKSERV_FORMAT', 'nickserv :identify %s')
@@ -32,6 +33,7 @@ irc = IRCSDK(IRCSDKConfig(
     nick=nick,
     ssl=ssl == 'True',
     channel=channel,
+    channels=channels,
     user=user,
     realname=realname,
     nickservFormat=nickservFormat,
