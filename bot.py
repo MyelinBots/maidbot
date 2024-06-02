@@ -24,6 +24,7 @@ realname = os.getenv('REALNAME', 'Maid')
 nickservFormat = os.getenv('NICKSERV_FORMAT', 'nickserv :identify %s')
 nickservPassword = os.getenv('NICKSERV_PASSWORD', None)
 passw = os.getenv('PASS', None)
+nodataTimeout = os.getenv('NODATA_TIMEOUT', 120)
 
 irc = IRCSDK(IRCSDKConfig(
     host=host,
@@ -35,7 +36,8 @@ irc = IRCSDK(IRCSDKConfig(
     realname=realname,
     nickservFormat=nickservFormat,
     nickservPassword=nickservPassword,
-    password=passw
+    password=passw,
+    nodataTimeout=int(nodataTimeout)
 ))
 
 teaModule = TeaModule(irc)
