@@ -11,4 +11,4 @@ class GreetingModule(Module):
     def handleCommand(self, message, command):
 
         if message.command == 'JOIN' and message.messageFrom != self.irc.config.nick:            
-            self.irc.privmsg(message.trailing, "Hello, %s, welcome to %s, enjoy your stay :)" % (message.messageTo, message.messageFrom))
+            self.irc.privmsg(message.trailing, "Hello, %s, welcome to %s, enjoy your stay :)" % (message.trailing, message.messageFrom))
