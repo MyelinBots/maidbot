@@ -54,8 +54,8 @@ cakeModule.startListening()
 snackModule = SnackModule(irc)
 snackModule.startListening()
 
-greetingModule = GreetingModule(irc)
-greetingModule.startListening()
+# greetingModule = GreetingModule(irc)
+# greetingModule.startListening()
 
 maidModule = MaidModule(irc)
 maidModule.startListening()
