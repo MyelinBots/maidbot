@@ -1,16 +1,20 @@
 from pyircsdk import IRCSDKConfig, IRCSDK, Module
 import os
 
+from modules.kiss.kiss import KissModule
+from modules.slap.slap import SlapModule
+from modules.hug.hug import HugModule
 from modules.tea.tea import TeaModule
 from modules.ramen.ramen import RamenModule
 from modules.cake.cake import CakeModule
-from modules.snack.snack import SnackModule
+from modules.food.food import FoodModule
 from modules.greeting.greeting import GreetingModule
 from modules.drink.drink import DrinkModule
 from modules.maid.maid import MaidModule
 from modules.help.help import HelpModule
 from modules.coffee.coffee import CoffeeModule
 from modules.weather.weather import WeatherModule
+
 
 host = os.getenv('HOST', 'irc.myelinbots.com')
 port = os.getenv('PORT', '6697')
@@ -51,8 +55,8 @@ ramenModule.startListening()
 cakeModule = CakeModule(irc)
 cakeModule.startListening()
 
-snackModule = SnackModule(irc)
-snackModule.startListening()
+foodModule = FoodModule(irc)
+foodModule.startListening()
 
 # greetingModule = GreetingModule(irc)
 # greetingModule.startListening()
@@ -71,5 +75,14 @@ coffeeModule.startListening()
 
 weatherModule = WeatherModule(irc)
 weatherModule.startListening()
+
+slapModule = SlapModule(irc)
+slapModule.startListening()
+
+kissModule = KissModule(irc)
+kissModule.startListening()
+
+hugModule = HugModule(irc)
+hugModule.startListening()
 
 irc.connect(None)

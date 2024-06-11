@@ -30,10 +30,10 @@ class RamenModule(Module):
                 if command.args[0] in self.ramens:
                     ramen = command.args[0]
                     giveTo = command.args[1]
-                    self.irc.privmsg(message.messageTo, "The maid serves %s ramen to %s and enjoy eating :)" % (ramen, giveTo))
+                    self.irc.privmsg(message.messageTo, "The maid serves %s ramen to %s and enjoy eating 🍜 :)" % (ramen, giveTo))
                     return
                 
-                self.irc.privmsg(message.messageTo, "The maid serves %s ramen to %s and enjoy eating :)" % (ramen, giveTo))
+                self.irc.privmsg(message.messageTo, "The maid serves %s ramen to %s and enjoy eating 🍜 :)" % (ramen, giveTo))
                 
     def handleError(self, message, command, error):
         if message.command == "PRIVMSG":
