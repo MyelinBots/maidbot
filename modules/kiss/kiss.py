@@ -22,12 +22,12 @@ class KissModule(Module):
             if command.command == self.fantasy + self.command:
                 if len(command.args) == 0:
                     kiss = random.choice(self.kisss)
-                    self.irc.privmsg(message.messageTo, "kiss %s %s" % (message.messageFrom, kiss))
+                    self.irc.privmsg(message.messageTo, "kisses %s %s" % (message.messageFrom, kiss))
                     return
 
                 giveTo = command.args[0]
                 kiss = random.choice(self.kisss)
-                self.irc.privmsg(message.messageTo, "kiss %s %s" % (giveTo, kiss))
+                self.irc.privmsg(message.messageTo, "kisses %s %s" % (giveTo, kiss))
                 
     def handleError(self, message, command, error):
         if message.command == "PRIVMSG":
