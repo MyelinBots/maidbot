@@ -29,6 +29,7 @@ class WeatherModule(Module):
                         weather = self.weatherApi.get_weather(location)
                         weatherMessage = ":: %s, %s, %s ::" % (weather.location.name, weather.location.region, weather.location.country)
                         weatherMessage += " :: Temperature %s °F | %s °C ::" % (weather.current.temp_f, weather.current.temp_c)
+                        weatherMessage += " :: Condition %s" % (weather.current.condition.text)
                         weatherMessage += " :: Pressure %s in | %s mb ::" % (weather.current.pressure_in, weather.current.pressure_mb)
                         weatherMessage += " :: Humidity %s ::" % weather.current.humidity
                         weatherMessage += " :: Percipitation %s in | %s mm ::" % (weather.current.precip_in, weather.current.precip_mm)
@@ -54,17 +55,19 @@ class WeatherModule(Module):
                     location = " ".join(command.args)
                     weather = self.weatherApi.get_weather(location)
                     weatherMessage = ":: %s, %s, %s ::" % (weather.location.name, weather.location.region, weather.location.country)
-                    weatherMessage += " :: Temperature %s °F | %s °C ::" % (weather.current.temp_f, weather.current.temp_c)
-                    weatherMessage += " :: Pressure %s in | %s mb ::" % (weather.current.pressure_in, weather.current.pressure_mb)
-                    weatherMessage += " :: Humidity %s ::" % weather.current.humidity
-                    weatherMessage += " :: Percipitation %s in | %s mm ::" % (weather.current.precip_in, weather.current.precip_mm)
-                    weatherMessage += " :: UV %s ::" % weather.current.uv
+                    weatherMessage += " :: Temperature %s °F | %s °C" % (weather.current.temp_f, weather.current.temp_c)
+                    weatherMessage += " :: Condition: %s" % (weather.current.condition.text)
+                    weatherMessage += " :: Pressure %s in | %s mb" % (weather.current.pressure_in, weather.current.pressure_mb)
+                    weatherMessage += " :: Humidity %s" % weather.current.humidity
+                    weatherMessage += " :: Percipitation %s in | %s mm" % (weather.current.precip_in, weather.current.precip_mm)
+                    weatherMessage += " :: UV %s" % weather.current.uv
                     weatherMessage += " :: Last Updated %s ::" % weather.current.last_updated
                     self.irc.privmsg(message.messageTo, weatherMessage)
 
 
 
     def handleError(self, message, command, error):
+        print(error)
         if message.command == "PRIVMSG":
             if command.command == self.fantasy + self.command:
                 self.irc.privmsg(message.messageTo,

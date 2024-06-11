@@ -1,5 +1,5 @@
 import requests
-from .weather_dict import WeatherResponse, Location, Current
+from .weather_dict import WeatherResponse, Location, Current, Condition
 
 
 class WeatherAPI:
@@ -24,6 +24,7 @@ class WeatherAPI:
 
         # parse json
         json = response.json()
+        print(json)
         location = Location(
             json["location"]["name"],
             json["location"]["region"],
@@ -34,13 +35,20 @@ class WeatherAPI:
             json["location"]["localtime_epoch"],
             json["location"]["localtime"]
         )
+
+        condition = Condition(
+            json['current']['condition']['text'],
+            json['current']['condition']['icon'],
+            json['current']['condition']['code']
+        )
+
         current = Current(
             json["current"]["last_updated_epoch"],
             json["current"]["last_updated"],
             json["current"]["temp_c"],
             json["current"]["temp_f"],
             json["current"]["is_day"],
-            json["current"]["condition"],
+            condition,
             json["current"]["wind_mph"],
             json["current"]["wind_kph"],
             json["current"]["wind_degree"],
