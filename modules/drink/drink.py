@@ -20,7 +20,7 @@ class DrinkModule(Module):
             "a glass of white wine 🍷",
             "a glass of lemon juice 🧃",
             "a glass of orange juice 🧃",
-            "a glass of apple juice 🧃" , 
+            "a glass of apple juice 🧃", 
             "a glass of old fashioned cocktail 🍸",
             "a glass of dry martini cocktail 🍸",
             "a glass of margarita cocktail 🍸", 
@@ -31,7 +31,7 @@ class DrinkModule(Module):
             "a glass of long island lced tea 🫖🍸", 
             "a glass of coconut milk 🥛", 
             "a can of dr. pepper 🥫", 
-            "a glass of root beer 🥤"
+            "a glass of root beer 🥤",
             "a can of pepsi 🥫",
             "a can of dr.pepper 🥫",
             "a can of coca-cola 🥫"
