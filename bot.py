@@ -30,6 +30,7 @@ nickservFormat = os.getenv('NICKSERV_FORMAT', 'nickserv :identify %s')
 nickservPassword = os.getenv('NICKSERV_PASSWORD', None)
 passw = os.getenv('PASS', None)
 nodataTimeout = os.getenv('NODATA_TIMEOUT', 120)
+allowAnySSL = os.getenv('ALLOW_ANY_SSL', False)
 
 irc = IRCSDK(IRCSDKConfig(
     host=host,
@@ -43,7 +44,8 @@ irc = IRCSDK(IRCSDKConfig(
     nickservFormat=nickservFormat,
     nickservPassword=nickservPassword,
     password=passw,
-    nodataTimeout=int(nodataTimeout)
+    nodataTimeout=int(nodataTimeout),
+    allowAnySSL=allowAnySSL == 'True'
 ))
 
 teaModule = TeaModule(irc)
