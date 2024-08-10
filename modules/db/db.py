@@ -3,8 +3,6 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from modules.pigeon.db.player import Base
-
 
 class DB():
 

@@ -4,6 +4,9 @@ from datetime import time
 
 from pyircsdk import Module
 
+from modules.db.db import DB
+from modules.db.weather_repository import WeatherRepository
+
 from .locations import Locations
 from .weather_api import WeatherAPI
 
@@ -13,6 +16,25 @@ class WeatherModule(Module):
         super().__init__(irc, "!", "w")
         self.weatherApi = WeatherAPI()
         self.locations = Locations()
+        self.db = DB()
+        self.weatherepository = WeatherRepository(self.db)
+        self.syncWeathers()
+
+    def syncWeathers(self):
+        Locations = self.weatherRepository.getAll()
+        channels = []
+        if self.irc.config.channel is None:
+            channels = self.irc.config.channels 
+        else:
+            channels = [self.irc.config.channel]
+        for channel in channels:
+            if 
+
+            
+        for location in Locations:
+            if location is None:
+                continue
+            self.s.append(Player(player.name, player.score, player.count))
 
 
     def handleCommand(self, message, command):
