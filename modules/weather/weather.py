@@ -19,12 +19,12 @@ class WeatherModule(Module):
         if message.command == "PRIVMSG":
             if command.command == self.fantasy + self.command:
                 message.messageFrom = message.messageFrom.lower()
-                if self.locations.has_location(message.messageFrom) is False and len(command.args) == 0:
+                if self.locations.has_location(message.messageFrom, message.messageTo) is False and len(command.args) == 0:
                     self.irc.privmsg(message.messageTo,
                                      "I am terribly sorry, but I am unable to find your location. Please add a location using !w add <location> or provide a location using !w <location>")
                     return
-                if self.locations.has_location(message.messageFrom) and len(command.args) == 0:
-                    location = self.locations.get_location(message.messageFrom)
+                if self.locations.has_location(message.messageFrom, message.messageTo) and len(command.args) == 0:
+                    location = self.locations.get_location(message.messageFrom, message.messageTo)
                     if location != None:
                         weather = self.weatherApi.get_weather(location)
                         weatherMessage = ":: %s, %s, %s ::" % (weather.location.name, weather.location.region, weather.location.country)
@@ -43,11 +43,11 @@ class WeatherModule(Module):
                 if command.args[0] == "add":
                     # join the rest of the args to get the location
                     location = " ".join(command.args[1:])
-                    self.locations.add_location(message.messageFrom, location)
+                    self.locations.add_location(message.messageFrom, message.messageTo, location)
                     self.irc.privmsg(message.messageTo, "Location %s added" % location)
                     return
                 if command.args[0] == "remove":
-                    self.locations.remove_location(message.messageFrom)
+                    self.locations.remove_location(message.messageFrom, message.messageTo)
                     self.irc.privmsg(message.messageTo, "Location removed")
                     return
 
