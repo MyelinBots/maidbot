@@ -20,4 +20,4 @@ class Weather(Base):
     location: Mapped[str] = mapped_column(String)
     
     def __repr__(self) -> str:
-        return f'<Weather(nick={self.nick}, server={self.server}, channel={self.channel}, location={self.location},)>'
+        return f'<Weather(nick={self.nick}, server={self.server}, channel={self.channel}, location={self.location})>'

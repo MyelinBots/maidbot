@@ -5,6 +5,7 @@ from datetime import time
 from pyircsdk import Module
 
 from modules.db.db import DB
+from modules.db.weather import Weather
 from modules.db.weather_repository import WeatherRepository
 
 from .locations import Locations
@@ -17,25 +18,24 @@ class WeatherModule(Module):
         self.weatherApi = WeatherAPI()
         self.locations = Locations()
         self.db = DB()
-        self.weatherepository = WeatherRepository(self.db)
+        self.weatherRepository = WeatherRepository(self.db)
         self.syncWeathers()
 
     def syncWeathers(self):
-        Locations = self.weatherRepository.getAll()
+        dbLocations: list[Weather] = self.weatherRepository.getAll()
         channels = []
-        if self.irc.config.channel is None:
+        if self.irc.config.channels is not None and len(self.irc.config.channels) > 0:
             channels = self.irc.config.channels 
         else:
             channels = [self.irc.config.channel]
-        for channel in channels:
-            if 
-
-            
-        for location in Locations:
+        for location in dbLocations:
             if location is None:
                 continue
-            self.s.append(Player(player.name, player.score, player.count))
-
+            if location.server != self.irc.config.host:
+                continue
+            if location.channel not in channels:
+                continue
+            self.locations.add_location(location.nick, location.channel, location.location)
 
     def handleCommand(self, message, command):
         if message.command == "PRIVMSG":
@@ -66,10 +66,12 @@ class WeatherModule(Module):
                     # join the rest of the args to get the location
                     location = " ".join(command.args[1:])
                     self.locations.add_location(message.messageFrom, message.messageTo, location)
+                    self.weatherRepository.upsert(message.messageFrom, self.irc.config.host, message.messageTo, location)
                     self.irc.privmsg(message.messageTo, "Location %s added" % location)
                     return
                 if command.args[0] == "remove":
                     self.locations.remove_location(message.messageFrom, message.messageTo)
+                    self.weatherRepository.delete(message.messageFrom, self.irc.config.host, message.messageTo)
                     self.irc.privmsg(message.messageTo, "Location removed")
                     return
 

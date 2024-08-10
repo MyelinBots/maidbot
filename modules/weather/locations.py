@@ -1,11 +1,13 @@
 # stores the locations of nicks
 class Locations:
-    def _init_(self):
+    def __init__(self):
         self.locations = {}
 
     def add_location(self, nick, channel, location):
+        print("Adding location", nick, channel, location)
         if channel not in self.locations:
             self.locations[channel] = {}
+        print("contiuining")
         self.locations[channel][nick] = location
 
     def get_location(self, nick, channel):
