@@ -9,7 +9,7 @@ class WeatherRepository:
 
     def get(self, nick, server, channel) -> Weather:
         session = self.db.getSession()
-        stmt = select(Weather).where(Weather.nick == nick).where(Weather.server == server).where(Weather.channel == channel)
+        stmt = select(Weather).where(Weather.nick == nick).where(Weather.server == server).where(Weather.channel == channel.lower())
         result = session.execute(stmt).first()
         weather = result[0] if result else None
         return weather
@@ -21,7 +21,8 @@ class WeatherRepository:
             userid = str(uuid.uuid4())
             weather = Weather(id=userid, nick=nick)
             weather.server = server
-            weather.channel = channel
+            # channel to lowercase
+            weather.channel = channel.lower()
             weather.location = location
             session.add(weather)
             session.commit()
@@ -33,7 +34,7 @@ class WeatherRepository:
     def delete(self, nick, server, channel):
         session = self.db.getSession()
         # get player by nick
-        weather = self.get(nick, server, channel)
+        weather = self.get(nick, server, channel.lower())
         # delete player
         session.delete(weather)
         session.commit()
