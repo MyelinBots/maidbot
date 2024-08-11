@@ -14,7 +14,7 @@ from modules.maid.maid import MaidModule
 from modules.help.help import HelpModule
 from modules.coffee.coffee import CoffeeModule
 from modules.weather.weather import WeatherModule
-
+from modules.horoscope.horoscope import HoroscopeModule
 
 host = os.getenv('HOST', 'irc.myelinbots.com')
 port = os.getenv('PORT', '6697')
@@ -86,5 +86,8 @@ kissModule.startListening()
 
 hugModule = HugModule(irc)
 hugModule.startListening()
+
+horoscopeModule = HoroscopeModule(irc)
+horoscopeModule.startListening()
 
 irc.connect(None)
