@@ -20,7 +20,7 @@ signs = {
 }
 
 class Horoscope:
-    def _init_(self, cacheTTL=20):
+    def __init__(self, cacheTTL=20):
         self.url = "https://www.horoscope.com/us/horoscopes/general/horoscope-general-daily-today.aspx"
         self.cache = Cache()
         self.cacheTTL = cacheTTL

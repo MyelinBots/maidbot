@@ -1,7 +1,7 @@
 import time
 
 class Cache:
-    def _init_(self):
+    def __init__(self):
         self.cache = {}
         self.expiration = {}
 

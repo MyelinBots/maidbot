@@ -9,7 +9,7 @@ class HoroscopeModule(Module):
     def __init__(self, irc):
         super().__init__(irc, "!", "hor")
         cacheTTL = os.getenv("HOROSCOPE_CACHE", 300)
-        self.horoscope = Horoscope(cacheTTL)
+        self.horoscope = Horoscope(cacheTTL=cacheTTL)
 
     def handleCommand(self, message, command):
         if message.command == "PRIVMSG":
@@ -18,10 +18,11 @@ class HoroscopeModule(Module):
                     self.irc.privmsg(message.messageTo, "Please share with me your sign")
                     return
                 sign = command.args[0]
-                message = self.horoscope.get_horoscope(sign=sign)
-                self.irc.privmsg(message.messageTo, message)
+                horoscopeMsg = self.horoscope.get_horoscope(sign=sign)
+                self.irc.privmsg(message.messageTo, horoscopeMsg)
 
     def handleError(self, message, command, error):
+        print(error)
         if message.command == "PRIVMSG":
             if command.command == self.fantasy + self.command:
                 self.irc.privmsg(message.messageTo, "Unfortunately, something went wrong, please try again")
