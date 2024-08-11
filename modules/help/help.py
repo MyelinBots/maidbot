@@ -13,4 +13,5 @@ class HelpModule(Module):
             if command.command == self.fantasy + self.command:
                 self.irc.privmsg(message.messageTo, "Hello, %s, these are available commands; !cake, !coffee, !drink, !maid, !ramen, !food, !tea, !kiss, !hug, and !slap" % message.messageFrom)
                 self.irc.privmsg(message.messageTo, "To play pigeon game; !shoot and to check score; !score")
+                self.irc.privmsg(message.messageTo, "To check your daily horoscope; !hor <sign>")
                 return
