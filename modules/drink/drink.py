@@ -28,7 +28,7 @@ class DrinkModule(Module):
             "a glass of mai tai 🍸", 
             "a glass of rum old fashioned 🍸", 
             "a glass of pina colada 🍸",
-            "a glass of long island lced tea 🫖🍸", 
+            "a glass of long island iced tea 🫖🍸", 
             "a glass of coconut milk 🥛", 
             "a can of dr. pepper 🥫", 
             "a glass of root beer 🥤",
