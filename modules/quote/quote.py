@@ -33,10 +33,10 @@ class QuoteModule(Module):
                 if command.args[0] in self.quotes:
                     quote = command.args[0]
                     giveTo = command.args[1]
-                    self.irc.privmsg(message.messageTo, "Today's quote for %s is * %s * " % (giveTo, quote))
+                    self.irc.privmsg(message.messageTo, "Today's quote for %s is --- %s --- " % (giveTo, quote))
                     return
                 
-                self.irc.privmsg(message.messageTo, "Today's quote for %s is * %s * " % (giveTo, quote))
+                self.irc.privmsg(message.messageTo, "Today's quote for %s is --- %s --- " % (giveTo, quote))
  
     def handleError(self, message, command, error):
         if message.command == "PRIVMSG":
