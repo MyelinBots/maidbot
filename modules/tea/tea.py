@@ -20,7 +20,7 @@ class TeaModule(Module):
             "jasmine tea 🌼, fragrant and floral, with delicate jasmine blossoms infusing the tea leaves for a subtly sweet taste" ,
             "chamomile lavender tea 🌼💜, a calming blend of chamomile and lavender flowers, perfect for relaxation and promoting sleep" ,
             "white tea 🍃 , light and delicate, with a subtle sweetness and minimal processing, preserving its natural antioxidants" ,
-            "Turmeric tea 🧡, warm and spicy" ,
+            "turmeric tea 🧡, warm and spicy" ,
             "rooibos tea 🍂, a caffeine-free herbal tea from South Africa, with a slightly sweet and nutty flavor profile" ,
             "cinnamon spice tea 🍂🌶️, a warm and comforting blend of black tea with cinnamon, cloves, and other spices, reminiscent of cozy autumn days" ,
             "ginseng oolong tea 🌱🍵, a unique combination of oolong tea with the earthy sweetness of ginseng" 

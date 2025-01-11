@@ -15,6 +15,8 @@ from modules.help.help import HelpModule
 from modules.coffee.coffee import CoffeeModule
 from modules.weather.weather import WeatherModule
 from modules.horoscope.horoscope import HoroscopeModule
+from modules.quote.quote import QuoteModule
+from modules.snack.snack import SnackModule
 
 host = os.getenv('HOST', 'irc.myelinbots.com')
 port = os.getenv('PORT', '6697')
@@ -27,7 +29,7 @@ channels = os.getenv('CHANNELS', '#lobby,#test').split(',')
 user = os.getenv('USER', 'Maid')
 realname = os.getenv('REALNAME', 'Maid')
 nickservFormat = os.getenv('NICKSERV_FORMAT', 'nickserv :identify %s')
-nickservPassword = os.getenv('NICKSERV_PASSWORD', None)
+nickservPassword = os.getenv('NICKSERV_PASSWORD', None) # irc.send("PRIVMSG NickServ :IDENTIFY your_password\r\n".encode())
 passw = os.getenv('PASS', None)
 nodataTimeout = os.getenv('NODATA_TIMEOUT', 120)
 allowAnySSL = os.getenv('ALLOW_ANY_SSL', False)
@@ -89,5 +91,11 @@ hugModule.startListening()
 
 horoscopeModule = HoroscopeModule(irc)
 horoscopeModule.startListening()
+
+quoteModule = QuoteModule(irc)
+quoteModule.startListening()
+
+snackModule = SnackModule(irc)
+snackModule.startListening()
 
 irc.connect(None)

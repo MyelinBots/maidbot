@@ -20,7 +20,11 @@ class CakeModule(Module):
             "banana" ,
             "tiramisu" ,
             "raspberry" ,
-            "matcha green tea"
+            "matcha green tea",
+            "strawberry",
+            "cheesecake",
+            "chiffon",
+            "orange"
         ]
 
     def handleCommand(self, message, command):
