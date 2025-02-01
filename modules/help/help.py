@@ -6,7 +6,7 @@ from pyircsdk import Module
 
 class HelpModule(Module):
     def __init__(self, irc):
-        super().__init__(irc, "!", "help")
+        super().__init__(irc, "!", "halp")
 
     def handleCommand(self, message, command):
         if message.command == "PRIVMSG":

@@ -21,7 +21,15 @@ class QuoteModule(Module):
             "Some people graduate with honors, I am just honored to graduate.",
             "I put my phone in airplane mode, but it’s not flying! ✈️ ",
             "I don’t need a hairstylist. My pillow gives me a new look every morning. 🛌 ",
-            "I thought about losing weight once... but I don’t like losing. 🏆"
+            "I thought about losing weight once... but I don’t like losing. 🏆",
+            "If you were a fruit, you’d be a fine-apple. 🍍",
+            "I told my plants a joke. They’re rooting for me. 🌱😂",
+            "My bed and I are perfect for each other, but my alarm clock keeps trying to break us up. ⏰💔",
+            "I wish I could drop my body off at the gym and pick it up when it’s ready. 🏋️‍♂️🍕",
+            "They said, ‘Follow your dreams.’ So I went back to bed. 😴💭",
+            "I wanted to lose weight, but it found me again. 🍔🍟",
+            "I’d agree with you, but then we’d both be wrong. 😜",
+            "I thought about becoming a baker, but I couldn’t make enough dough. 🥖💸"
 
         ]
 
