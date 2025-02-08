@@ -17,6 +17,7 @@ from modules.weather.weather import WeatherModule
 from modules.horoscope.horoscope import HoroscopeModule
 from modules.quote.quote import QuoteModule
 from modules.snack.snack import SnackModule
+from modules.time.time import TimeModule
 
 host = os.getenv('HOST', 'irc.myelinbots.com')
 port = os.getenv('PORT', '6697')
@@ -97,5 +98,8 @@ quoteModule.startListening()
 
 snackModule = SnackModule(irc)
 snackModule.startListening()
+
+timeModule = TimeModule(irc)
+timeModule.startListening()
 
 irc.connect(None)
