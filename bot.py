@@ -13,11 +13,12 @@ from modules.drink.drink import DrinkModule
 from modules.maid.maid import MaidModule
 from modules.help.help import HelpModule
 from modules.coffee.coffee import CoffeeModule
+from modules.weather import locations
 from modules.weather.weather import WeatherModule
 from modules.horoscope.horoscope import HoroscopeModule
 from modules.quote.quote import QuoteModule
 from modules.snack.snack import SnackModule
-from modules.time.time import TimeModule
+from modules.time.time import TimeModule, TimezoneModule, Locations
 
 host = os.getenv('HOST', 'irc.myelinbots.com')
 port = os.getenv('PORT', '6697')
@@ -99,7 +100,14 @@ quoteModule.startListening()
 snackModule = SnackModule(irc)
 snackModule.startListening()
 
-timeModule = TimeModule(irc)
+locations = Locations()
+
+timeModule = TimeModule(irc, locations)
 timeModule.startListening()
+
+timezoneModule = TimezoneModule(irc, locations)
+timezoneModule.startListening()
+
+
 
 irc.connect(None)
