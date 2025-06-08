@@ -19,15 +19,17 @@ from modules.horoscope.horoscope import HoroscopeModule
 from modules.quote.quote import QuoteModule
 from modules.snack.snack import SnackModule
 from modules.time.time import TimeModule, TimezoneModule, Locations
+from modules.invite.invite import InviteModule
 
-host = os.getenv('HOST', 'irc.myelinbots.com')
+
+host = os.getenv('HOST', 'Vampires.DarkWorld.Network')
 port = os.getenv('PORT', '6697')
 # convert port string to int
 port = int(port)
 nick = os.getenv('NICK', 'Maid')
 ssl = os.getenv('SSL', 'True')
-channel = os.getenv('CHANNEL', '#lobby')
-channels = os.getenv('CHANNELS', '#lobby,#test').split(',')
+channel = os.getenv('CHANNEL', '#Scientist')
+channels = os.getenv('CHANNELS', '#Scientist').split(',')
 user = os.getenv('USER', 'Maid')
 realname = os.getenv('REALNAME', 'Maid')
 nickservFormat = os.getenv('NICKSERV_FORMAT', 'nickserv :identify %s')
@@ -108,6 +110,7 @@ timeModule.startListening()
 timezoneModule = TimezoneModule(irc, locations)
 timezoneModule.startListening()
 
-
+inviteModule = InviteModule(irc)
+inviteModule.startListening()
 
 irc.connect(None)
