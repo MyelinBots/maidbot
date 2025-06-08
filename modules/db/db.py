@@ -9,7 +9,7 @@ from modules.db.weather import Base
 class DB():
 
     def __init__(self):
-        postgresDSN = os.getenv('POSTGRES_DSN', 'postgresql+psycopg2://pigeon:mysecretpassword@localhost:5432/pigeon')
+        postgresDSN = os.getenv('POSTGRES_DSN', 'postgresql+psycopg2://postgres:mysecretpassword@localhost:5432/pigeon')
         self.db = create_engine(postgresDSN)
         self.db.connect()
         Base.metadata.create_all(self.db)
