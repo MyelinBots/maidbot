@@ -21,6 +21,8 @@ from modules.snack.snack import SnackModule
 from modules.time.time import TimeModule, TimezoneModule, Locations
 from modules.invite.invite import InviteModule
 from modules.youtube.youtube import YouTubeModule
+from modules.google.google import GoogleModule
+
 
 
 host = os.getenv('HOST', 'US.DarkWorld.Network')
@@ -120,5 +122,13 @@ youtubeModule = YouTubeModule(
     cooldown_s=int(os.getenv("YT_COOLDOWN", "6")),
 )
 youtubeModule.startListening()
+
+googleModule = GoogleModule(
+    irc,
+    results=int(os.getenv("GOOGLE_RESULTS", "1")),
+    cooldown_s=int(os.getenv("GOOGLE_COOLDOWN", "6")),
+    lang=os.getenv("GOOGLE_LANG", "en"),
+)
+googleModule.startListening()
 
 irc.connect(None)
