@@ -20,16 +20,17 @@ from modules.quote.quote import QuoteModule
 from modules.snack.snack import SnackModule
 from modules.time.time import TimeModule, TimezoneModule, Locations
 from modules.invite.invite import InviteModule
+from modules.youtube.youtube import YouTubeModule
 
 
-host = os.getenv('HOST', 'Vampires.DarkWorld.Network')
+host = os.getenv('HOST', 'US.DarkWorld.Network')
 port = os.getenv('PORT', '6697')
 # convert port string to int
 port = int(port)
 nick = os.getenv('NICK', 'Maid')
 ssl = os.getenv('SSL', 'True')
-channel = os.getenv('CHANNEL', '#Scientist')
-channels = os.getenv('CHANNELS', '#Scientist').split(',')
+channel = os.getenv('CHANNEL', '#testing')
+channels = os.getenv('CHANNELS', '#testing').split(',')
 user = os.getenv('USER', 'Maid')
 realname = os.getenv('REALNAME', 'Maid')
 nickservFormat = os.getenv('NICKSERV_FORMAT', 'nickserv :identify %s')
@@ -112,5 +113,12 @@ timezoneModule.startListening()
 
 inviteModule = InviteModule(irc)
 inviteModule.startListening()
+
+youtubeModule = YouTubeModule(
+    irc,
+    results=int(os.getenv("YT_RESULTS", "1")),   # set to 3 for top 3
+    cooldown_s=int(os.getenv("YT_COOLDOWN", "6")),
+)
+youtubeModule.startListening()
 
 irc.connect(None)
