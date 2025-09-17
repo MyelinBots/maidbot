@@ -118,14 +118,15 @@ inviteModule.startListening()
 
 youtubeModule = YouTubeModule(
     irc,
-    results=int(os.getenv("YT_RESULTS", "1")),   # set to 3 for top 3
-    cooldown_s=int(os.getenv("YT_COOLDOWN", "6")),
+    default_results=1,   # instead of results=1
+    cooldown_s=6,
+    warn_missing=True
 )
 youtubeModule.startListening()
 
 googleModule = GoogleModule(
     irc,
-    results=int(os.getenv("GOOGLE_RESULTS", "1")),
+    default_results=int(os.getenv("GOOGLE_RESULTS", "1")),
     cooldown_s=int(os.getenv("GOOGLE_COOLDOWN", "6")),
     lang=os.getenv("GOOGLE_LANG", "en"),
 )
