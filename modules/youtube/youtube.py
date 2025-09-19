@@ -1,6 +1,4 @@
 from __future__ import annotations
-
-import re
 import threading
 import time
 from dataclasses import dataclass
@@ -33,23 +31,27 @@ def _human_duration(seconds: Optional[int]) -> Optional[str]:
 class YouTubeModule(Module):
     """
     Usage:
-      !youtube <query>           Search YouTube and return top result(s)
-      !youtube help              Show help
-      !youtube set results <n>   Set number of results (1..5)
-      !youtube set cooldown <s>  Set cooldown seconds per target
+      !youtube <query>
+      !youtube help
+      !youtube set results <1-5>
+      !youtube set cooldown <seconds>
     """
     MAX_RESULTS = 5
 
-    def __init__(self, irc, *, default_results: int = 1, cooldown_s: int = 6, warn_missing: bool = True):
-        # Match WeatherModule style: fantasy prefix + short command key
-        # Here we keep "youtube" as the command token to align with your existing trigger.
+    def __init__(self, irc, *, default_results: int = 3, cooldown_s: int = 6, warn_missing: bool = True):
+        # สไตล์ WeatherModule: กำหนด prefix + คำสั่ง
         super().__init__(irc, "!", "youtube")
         self.results = max(1, min(int(default_results), self.MAX_RESULTS))
         self.cooldown_s = int(cooldown_s)
         self.warn_missing = warn_missing
         self._cd: Dict[str, float] = {}
 
-    # ========== pyircsdk Module interface (WeatherModule-style) ==========
+        # อ่าน config สำหรับ cookies
+        cfg = getattr(self.irc, "config", object())
+        self.cookies_browser: Optional[str] = getattr(cfg, "youtube_cookies_browser", None)
+        self.cookiefile: Optional[str] = getattr(cfg, "youtube_cookiefile", None)
+
+    # ========= Entry points (WeatherModule-style) =========
 
     def handleCommand(self, message, command):
         if message.command != "PRIVMSG":
@@ -57,20 +59,22 @@ class YouTubeModule(Module):
         if command.command != self.fantasy + self.command:
             return
 
-        # Normalize
         frm = (message.messageFrom or "").lower()
         to = message.messageTo
         args = command.args or []
 
-        # Help
+        # help / ไม่มี args
         if len(args) == 0 or (len(args) == 1 and args[0].lower() == "help"):
-            self._say(to, "Usage: !youtube <keywords> ::::: !youtube set results <1-5> ::::: !youtube set cooldown <seconds>")
+            self._say(
+                to,
+                "Usage: !youtube <keywords> ::::: !youtube set results <1-5> ::::: !youtube set cooldown <seconds>"
+            )
             return
 
-        # Settings subcommands
-        if len(args) >= 2 and args[0].lower() == "set":
-            subcmd = (args[1] if len(args) >= 2 else "").lower()
-            if subcmd == "results" and len(args) >= 3:
+        # ตั้งค่า
+        if args[0].lower() == "set" and len(args) >= 2:
+            sub = args[1].lower()
+            if sub == "results" and len(args) >= 3:
                 try:
                     n = int(args[2])
                     self.results = max(1, min(n, self.MAX_RESULTS))
@@ -78,7 +82,7 @@ class YouTubeModule(Module):
                 except ValueError:
                     self._say(to, f"{frm}: results must be an integer 1..{self.MAX_RESULTS}")
                 return
-            if subcmd == "cooldown" and len(args) >= 3:
+            if sub == "cooldown" and len(args) >= 3:
                 try:
                     s = int(args[2])
                     self.cooldown_s = max(0, s)
@@ -86,36 +90,28 @@ class YouTubeModule(Module):
                 except ValueError:
                     self._say(to, f"{frm}: cooldown must be an integer (seconds)")
                 return
-            # Unknown set subcommand
             self._say(to, "Usage: !youtube set results <1-5> ::::: !youtube set cooldown <seconds>")
             return
 
-        # Regular search
+        # ค้นหา
         query = " ".join(args).strip()
         if not query:
-            self._say(to, f"{frm}: usage: !youtube <title or keywords>")
+            self._say(to, f"{frm}: usage: !youtube <keywords>")
             return
-
         if self._cooldown(to):
             return
 
-        threading.Thread(
-            target=self._search_and_reply,
-            args=(to, frm, query),
-            daemon=True
-        ).start()
+        threading.Thread(target=self._search_and_reply, args=(to, frm, query), daemon=True).start()
 
     def handleError(self, message, command, error):
-        # Mirror WeatherModule error handling tone
         if message.command == "PRIVMSG" and command.command == self.fantasy + self.command:
             self._say(message.messageTo, "Sorry, I was unable to handle your request. Please try again later.")
-        # Optionally also log/print
         try:
             print(error)
         except Exception:
             pass
 
-    # ========== Internal helpers ==========
+    # ===================== internals =====================
 
     def _cooldown(self, target: str) -> bool:
         now = time.time()
@@ -128,30 +124,44 @@ class YouTubeModule(Module):
     def _search_and_reply(self, target: str, nick: str, query: str):
         if YoutubeDL is None:
             if self.warn_missing:
-                self._say(target, "⚠️ yt_dlp not installed. `pip install yt-dlp`")
+                self._say(target, "⚠️ yt_dlp not installed. `pip install -U yt-dlp`")
             return
 
         try:
-            results = self._yt_search(query, self.results)
+            results = self._yt_search(query, max(1, self.results))
             if not results:
                 self._say(target, f"{nick}: no results for '{query}'.")
                 return
-
             for line in self._format(results):
                 self._say(target, line)
         except Exception as e:
+            # แสดง error ของ yt-dlp (รวมเคสต้องใช้ cookies)
             self._say(target, f"{nick}: error searching YouTube: {e}")
 
     def _yt_search(self, query: str, limit: int) -> List[YouTubeResult]:
-        opts = {
+        # ตัวเลือกสำหรับ yt-dlp
+        opts: Dict[str, object] = {
             "quiet": True,
             "skip_download": True,
             "extract_flat": False,
             "noplaylist": True,
+            # ลดโอกาสโดนบล็อก/ต้องยืนยันตัวตน: ใช้ client ฝั่ง Android
+            "extractor_args": {"youtube": {"player_client": ["android"]}},
+            # ถ้าคุณมี proxy/geo ปรับได้ เช่น:
+            # "proxy": "socks5://127.0.0.1:9050",
         }
+
+        # จัดการ cookies: ให้ความสำคัญกับไฟล์ก่อน ถ้าไม่มีค่อยใช้เบราว์เซอร์
+        if self.cookiefile:
+            opts["cookiefile"] = self.cookiefile
+        elif self.cookies_browser:
+            # ตัวอย่าง: ("chrome",) หรือ ("firefox", "default") / ("safari",)
+            opts["cookiesfrombrowser"] = (self.cookies_browser,)
+
         q = f"ytsearch{max(1, int(limit))}:{query}"
         with YoutubeDL(opts) as ydl:
             info = ydl.extract_info(q, download=False)
+
         entries = (info or {}).get("entries") or []
         out: List[YouTubeResult] = []
         for e in entries[:limit]:
@@ -178,11 +188,9 @@ class YouTubeModule(Module):
         return lines
 
     def _say(self, target: str, text: str):
-        # Match WeatherModule: always use self.irc.privmsg
         try:
             self.irc.privmsg(target, text)
         except Exception:
-            # Fallback to Module.privmsg if available
             try:
                 self.privmsg(target, text)
             except Exception:
