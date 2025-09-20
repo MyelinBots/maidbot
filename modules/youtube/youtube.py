@@ -7,9 +7,9 @@ from typing import Optional, List, Dict
 from pyircsdk import Module
 
 try:
-    from yt_dlp import YoutubeDL
-except Exception:
-    YoutubeDL = None  # type: ignore
+    from youtubesearchpython import VideosSearch
+except ImportError:
+    VideosSearch = None  # type: ignore
 
 
 @dataclass
@@ -20,16 +20,11 @@ class YouTubeResult:
     duration_human: Optional[str] = None
 
 
-def _human_duration(seconds: Optional[int]) -> Optional[str]:
-    if seconds is None:
-        return None
-    m, s = divmod(int(seconds), 60)
-    h, m = divmod(m, 60)
-    return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
-
-
 class YouTubeModule(Module):
     """
+    Simple YouTube search module using youtube-search-python.
+    No API key or cookies required.
+
     Usage:
       !youtube <query>
       !youtube help
@@ -39,19 +34,11 @@ class YouTubeModule(Module):
     MAX_RESULTS = 5
 
     def __init__(self, irc, *, default_results: int = 3, cooldown_s: int = 6, warn_missing: bool = True):
-        # สไตล์ WeatherModule: กำหนด prefix + คำสั่ง
         super().__init__(irc, "!", "youtube")
         self.results = max(1, min(int(default_results), self.MAX_RESULTS))
         self.cooldown_s = int(cooldown_s)
         self.warn_missing = warn_missing
         self._cd: Dict[str, float] = {}
-
-        # อ่าน config สำหรับ cookies
-        cfg = getattr(self.irc, "config", object())
-        self.cookies_browser: Optional[str] = getattr(cfg, "youtube_cookies_browser", None)
-        self.cookiefile: Optional[str] = getattr(cfg, "youtube_cookiefile", None)
-
-    # ========= Entry points (WeatherModule-style) =========
 
     def handleCommand(self, message, command):
         if message.command != "PRIVMSG":
@@ -63,7 +50,7 @@ class YouTubeModule(Module):
         to = message.messageTo
         args = command.args or []
 
-        # help / ไม่มี args
+        # help / no args
         if len(args) == 0 or (len(args) == 1 and args[0].lower() == "help"):
             self._say(
                 to,
@@ -71,7 +58,7 @@ class YouTubeModule(Module):
             )
             return
 
-        # ตั้งค่า
+        # settings
         if args[0].lower() == "set" and len(args) >= 2:
             sub = args[1].lower()
             if sub == "results" and len(args) >= 3:
@@ -93,7 +80,7 @@ class YouTubeModule(Module):
             self._say(to, "Usage: !youtube set results <1-5> ::::: !youtube set cooldown <seconds>")
             return
 
-        # ค้นหา
+        # search
         query = " ".join(args).strip()
         if not query:
             self._say(to, f"{frm}: usage: !youtube <keywords>")
@@ -111,8 +98,6 @@ class YouTubeModule(Module):
         except Exception:
             pass
 
-    # ===================== internals =====================
-
     def _cooldown(self, target: str) -> bool:
         now = time.time()
         last = self._cd.get(target, 0.0)
@@ -122,9 +107,9 @@ class YouTubeModule(Module):
         return False
 
     def _search_and_reply(self, target: str, nick: str, query: str):
-        if YoutubeDL is None:
+        if VideosSearch is None:
             if self.warn_missing:
-                self._say(target, "⚠️ yt_dlp not installed. `pip install -U yt-dlp`")
+                self._say(target, "⚠️ youtube-search-python not installed. `pip install youtube-search-python`")
             return
 
         try:
@@ -135,42 +120,27 @@ class YouTubeModule(Module):
             for line in self._format(results):
                 self._say(target, line)
         except Exception as e:
-            # แสดง error ของ yt-dlp (รวมเคสต้องใช้ cookies)
             self._say(target, f"{nick}: error searching YouTube: {e}")
 
     def _yt_search(self, query: str, limit: int) -> List[YouTubeResult]:
-        # ตัวเลือกสำหรับ yt-dlp
-        opts: Dict[str, object] = {
-            "quiet": True,
-            "skip_download": True,
-            "extract_flat": False,
-            "noplaylist": True,
-            # ลดโอกาสโดนบล็อก/ต้องยืนยันตัวตน: ใช้ client ฝั่ง Android
-            "extractor_args": {"youtube": {"player_client": ["android"]}},
-            # ถ้าคุณมี proxy/geo ปรับได้ เช่น:
-            # "proxy": "socks5://127.0.0.1:9050",
-        }
+        search = VideosSearch(query, limit=limit)
+        results = search.result()
 
-        # จัดการ cookies: ให้ความสำคัญกับไฟล์ก่อน ถ้าไม่มีค่อยใช้เบราว์เซอร์
-        if self.cookiefile:
-            opts["cookiefile"] = self.cookiefile
-        elif self.cookies_browser:
-            # ตัวอย่าง: ("chrome",) หรือ ("firefox", "default") / ("safari",)
-            opts["cookiesfrombrowser"] = (self.cookies_browser,)
-
-        q = f"ytsearch{max(1, int(limit))}:{query}"
-        with YoutubeDL(opts) as ydl:
-            info = ydl.extract_info(q, download=False)
-
-        entries = (info or {}).get("entries") or []
         out: List[YouTubeResult] = []
-        for e in entries[:limit]:
+        for video in results.get('result', []):
+            # Extract duration and format it
+            duration = video.get('duration')
+            duration_human = None
+            if duration:
+                # Duration comes as "MM:SS" or "H:MM:SS" format already
+                duration_human = duration
+
             out.append(
                 YouTubeResult(
-                    title=e.get("title") or "(no title)",
-                    url=e.get("webpage_url") or e.get("url") or "",
-                    channel=e.get("channel") or e.get("uploader"),
-                    duration_human=_human_duration(e.get("duration")),
+                    title=video.get('title', '(no title)'),
+                    url=video.get('link', ''),
+                    channel=video.get('channel', {}).get('name') if video.get('channel') else None,
+                    duration_human=duration_human,
                 )
             )
         return out

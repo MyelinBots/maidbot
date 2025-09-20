@@ -118,7 +118,7 @@ inviteModule.startListening()
 
 youtubeModule = YouTubeModule(
     irc,
-    default_results=1,   # instead of results=1
+    default_results=1,
     cooldown_s=6,
     warn_missing=True
 )
