@@ -246,22 +246,16 @@ class GoogleModule(Module):
         urls: List[str] = []
         err: Optional[Exception] = None
         try:
-            # Style B first (common): num/stop/pause/user_agent/lang/tld
+            # Current googlesearch-python API uses num_results parameter
+            # Use longer sleep_interval to avoid rate limiting
             urls = list(google_search_func(
                 query,
-                num=self.results,
-                stop=self.results,
-                pause=2.0,
-                user_agent=self.UA,
+                num_results=self.results,
                 lang=self.lang,
-                tld="com",
+                sleep_interval=3,  # Increased from 1 to 3 seconds
+                timeout=10,        # Increased timeout
+                safe='off'         # Turn off safe search for more results
             ))
-        except TypeError:
-            try:
-                # Style A (some forks): num_results + lang
-                urls = list(google_search_func(query, num_results=self.results, lang=self.lang))
-            except Exception as e2:
-                err = e2
         except Exception as e:
             err = e
         # scraping backend has no titles

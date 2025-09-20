@@ -126,8 +126,8 @@ youtubeModule.startListening()
 
 googleModule = GoogleModule(
     irc,
-    default_results=int(os.getenv("GOOGLE_RESULTS", "1")),
-    cooldown_s=int(os.getenv("GOOGLE_COOLDOWN", "6")),
+    default_results=int(os.getenv("GOOGLE_RESULTS", "3")),
+    cooldown_s=int(os.getenv("GOOGLE_COOLDOWN", "15")),  # Increased cooldown to reduce rate limiting
     lang=os.getenv("GOOGLE_LANG", "en"),
 )
 googleModule.startListening()
