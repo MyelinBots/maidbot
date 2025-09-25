@@ -15,7 +15,8 @@ class HelpModule(Module):
                     "Hello, %s, I am the Maid of DarkWorld Network. These are available commands:"
                     % message.messageFrom
                 )
-                self.irc.privmsg(message.messageTo, "Fun: !cake, !coffee, !drink, !maid, !ramen, !food, !tea, !snack, !kiss, !hug, !slap")
+                self.irc.privmsg(message.messageTo, "Service: !cake, !coffee, !drink, !maid, !ramen, !food, !tea, !snack")
+                self.irc.privmsg(message.messageTo, "Fun: !kiss, !hug, !slap")
                 self.irc.privmsg(message.messageTo, "Info: !quote <nick>, !hor <sign> (horoscope), !w <location> (weather)")
                 self.irc.privmsg(message.messageTo, "Utility: !invite maid <#channel>, !youtube <query>, !google <query>")
                 self.irc.privmsg(message.messageTo, "Check all commands; !halp")
