@@ -12,15 +12,18 @@ class HelpModule(Module):
             if command.command == self.fantasy + self.command:
                 self.irc.privmsg(
                     message.messageTo,
-                    "Hello, %s, I am the Maid of DarkWorld Network. These are available commands; !cake, !coffee, !drink, !maid, !ramen, !food, !tea, !snack, !kiss, !hug, and !slap"
+                    "Hello, %s, I am the Maid of DarkWorld Network. These are available commands:"
                     % message.messageFrom
                 )
-                self.irc.privmsg(message.messageTo, "→ Check out the daily quotes; !quote")
-                self.irc.privmsg(message.messageTo, "→ To check your daily horoscope; !hor <sign>")
-                self.irc.privmsg(message.messageTo, "→ To check the weather; !w <location>")
-                self.irc.privmsg(message.messageTo, "→ To invite me to your channel; !invite maid <#channel>")
-                self.irc.privmsg(message.messageTo, "→ To search YouTube; !youtube <query>")
-                self.irc.privmsg(message.messageTo, "→ To search Google; !google <query>")
-                self.irc.privmsg(message.messageTo, "→ To get help; !halp")
+                self.irc.privmsg(message.messageTo, "Fun: !cake, !coffee, !drink, !maid, !ramen, !food, !tea, !snack, !kiss, !hug, !slap")
+                self.irc.privmsg(message.messageTo, "Info: !quote <nick>, !hor <sign> (horoscope), !w <location> (weather)")
+                self.irc.privmsg(message.messageTo, "Utility: !invite maid <#channel>, !youtube <query>, !google <query>")
+                self.irc.privmsg(message.messageTo, "Check all commands; !halp")
                 self.irc.privmsg(message.messageTo, "✨ ~Thank you and enjoy your day!~ ✨😊")
                 return
+
+
+
+
+
+
